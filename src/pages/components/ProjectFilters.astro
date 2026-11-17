@@ -1,0 +1,43 @@
+---
+import TechIcon from "./TechIcon.astro";
+import { techs, groups, type TechId } from "../../data/techs";
+
+const entries = Object.entries(techs) as [TechId, (typeof techs)[TechId]][];
+---
+
+<aside
+  class="shrink-0 border-b border-line bg-surface text-[0.75rem] md:w-[13rem] md:overflow-y-auto md:border-r md:border-b-0 [scrollbar-width:thin]"
+  aria-label="Filter projects by technology"
+>
+  {
+    groups.map((group) => (
+      <details open={group.open} class="group border-b border-line">
+        <summary class="flex cursor-pointer list-none items-center gap-2 px-4 py-3 text-muted outline-none transition-colors select-none hover:text-fg focus-visible:text-accent [&::-webkit-details-marker]:hidden">
+          <svg viewBox="0 0 24 24" class="size-3 -rotate-90 transition-transform group-open:rotate-0" fill="currentColor" aria-hidden="true">
+            <path d="M5 8h14l-7 9z" />
+          </svg>
+          {group.label}
+        </summary>
+
+        <ul class="pb-2">
+          {entries
+            .filter(([, t]) => t.group === group.id)
+            .map(([id, t]) => (
+              <li>
+                <label class="flex cursor-pointer items-center gap-2.5 px-4 py-2 text-muted transition-colors hover:bg-accent-soft/60">
+                  <input type="checkbox" class="peer sr-only" value={id} data-filter data-label={t.label} />
+                  <span class="grid size-4 shrink-0 place-items-center rounded-sm border border-line bg-surface-alt text-bg transition-colors peer-checked:border-accent peer-checked:bg-accent peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-checked:[&_svg]:opacity-100">
+                    <svg viewBox="0 0 24 24" class="size-3 opacity-0" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M5 12l4.5 4.5L19 7" />
+                    </svg>
+                  </span>
+                  <TechIcon id={id} class="size-4 shrink-0" />
+                  <span class="peer-checked:text-accent">{t.label}</span>
+                </label>
+              </li>
+            ))}
+        </ul>
+      </details>
+    ))
+  }
+</aside>

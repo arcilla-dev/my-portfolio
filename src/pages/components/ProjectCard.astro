@@ -1,0 +1,61 @@
+---
+import TechIcon from "./TechIcon.astro";
+import { techs } from "../../data/techs";
+import type { Project } from "../../data/projects";
+
+interface Props {
+  project: Project;
+  /** 1-based position, used for the "Project N" label. */
+  number: number;
+}
+
+const { project, number } = Astro.props;
+const { slug, description, tech, href, image, hue = 170 } = project;
+
+const badge = tech[0];
+const cover = `linear-gradient(135deg, hsl(${hue} 55% 15%), hsl(${(hue + 50) % 360} 65% 32%))`;
+---
+
+<div class="flex h-full flex-col gap-2.5">
+  <p class="text-[0.7rem] text-muted">
+    <span class="font-medium text-accent">Project {number}</span> // {slug}
+  </p>
+
+  <article
+    class="flex flex-1 flex-col overflow-hidden rounded-lg border border-line bg-surface shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/60"
+  >
+    <div class="relative h-[8.5rem] overflow-hidden" style={image ? undefined : `background:${cover}`}>
+      {
+        image ? (
+          <img src={image} alt={`${slug} preview`} loading="lazy" class="size-full object-cover" />
+        ) : (
+          <span class="absolute inset-0 grid place-items-center text-[2.2rem] text-white/15 select-none" aria-hidden="true">
+            &lt;/&gt;
+          </span>
+        )
+      }
+
+      {
+        badge && (
+          <span
+            class="absolute top-2.5 right-2.5 grid size-6 place-items-center rounded bg-black/55 text-accent backdrop-blur-sm"
+            title={tech.map((t) => techs[t].label).join(", ")}
+          >
+            <TechIcon id={badge} class="size-3.5" />
+          </span>
+        )
+      }
+    </div>
+
+    <div class="flex flex-1 flex-col gap-4 p-5">
+      <p class="text-[0.8rem] leading-[1.7]">{description}</p>
+
+      <a
+        href={href}
+        class="mt-auto w-fit rounded bg-surface-alt px-3 py-1.5 text-[0.7rem] text-fg outline-none transition-colors hover:bg-accent-soft hover:text-accent focus-visible:ring-2 focus-visible:ring-accent"
+      >
+        view-project
+      </a>
+    </div>
+  </article>
+</div>

@@ -1,0 +1,59 @@
+---
+/**
+ * "Falling between two skyscrapers": two building walls in true one-point perspective.
+ * Both walls recede toward a vanishing point at the centre of the screen. Lines running
+ * along the depth axis converge on it; the cross lines (floors) bunch up as they get
+ * farther away. A radial mask fades everything out toward the centre.
+ *
+ * Line colour comes from --grid-line (neutral in dark mode, light teal in light mode).
+ */
+const CENTER = 500; // vanishing point in the 1000x1000 viewBox
+const WALL_DIST = 600; // how far the wall is from the view axis (bigger = wider gap)
+const Z_NEAR = 1;
+const Z_FAR = 6; // bigger = the walls reach closer to the vanishing point
+const HALF_WIDTH = 1600; // how wide the wall is along its own surface
+const FLOORS = 12; // cross lines
+const COLUMNS = 24; // lines running toward the vanishing point
+
+const r = Math.SQRT1_2;
+const n = [-r, -r]; // wall normal: points to the top-left
+const e = [r, -r]; // direction along the wall surface
+
+// Perspective: surface point (s) at depth z -> screen position.
+const project = (s: number, z: number): [number, number] => [
+  CENTER + (n[0] * WALL_DIST + e[0] * s) / z,
+  CENTER + (n[1] * WALL_DIST + e[1] * s) / z,
+];
+
+const seg = (a: [number, number], b: [number, number]) =>
+  `M${a[0].toFixed(1)} ${a[1].toFixed(1)}L${b[0].toFixed(1)} ${b[1].toFixed(1)}`;
+
+const paths: string[] = [];
+
+// Floors: constant depth, running across the wall (spacing shrinks with distance).
+for (let j = 0; j <= FLOORS; j++) {
+  const z = Z_NEAR + ((Z_FAR - Z_NEAR) * j) / FLOORS;
+  paths.push(seg(project(-HALF_WIDTH, z), project(HALF_WIDTH, z)));
+}
+
+// Columns: constant position on the wall, running from near to far (converge on the centre).
+for (let i = 0; i <= COLUMNS; i++) {
+  const s = -HALF_WIDTH + ((2 * HALF_WIDTH) * i) / COLUMNS;
+  paths.push(seg(project(s, Z_NEAR), project(s, Z_FAR)));
+}
+
+const d = paths.join("");
+---
+
+<svg
+  aria-hidden="true"
+  viewBox="0 0 1000 1000"
+  preserveAspectRatio="none"
+  class="pointer-events-none absolute inset-0 -z-10 size-full text-grid [mask-image:radial-gradient(ellipse_at_center,transparent_4%,#000_72%)]"
+  fill="none"
+  stroke="currentColor"
+>
+  <!-- Wall 1 (top-left) and wall 2 (bottom-right, the same wall turned 180°) -->
+  <path d={d} stroke-width="1" vector-effect="non-scaling-stroke" />
+  <path d={d} stroke-width="1" vector-effect="non-scaling-stroke" transform="rotate(180 500 500)" />
+</svg>

@@ -18,6 +18,7 @@
   --code-comment: #6b7480;
   --toggle-active: #e3f1ed;
   --card-shadow: 0 6px 20px rgba(20, 30, 40, 0.08);
+  --grid-line: rgba(11, 127, 110, 0.32); /* light teal */
 
   /* Header and footer share this height */
   --bar-h: 3rem;
@@ -38,6 +39,7 @@
   --code-comment: #8a8a8a;
   --toggle-active: #3a3a3a;
   --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --grid-line: rgba(255, 255, 255, 0.22);
 }
 
 /* Expose the variables as Tailwind tokens: bg-bg, bg-surface, text-fg, border-line, ... */
@@ -55,6 +57,7 @@
   --color-code-comment: var(--code-comment);
   --color-toggle-active: var(--toggle-active);
   --shadow-card: var(--card-shadow);
+  --color-grid: var(--grid-line);
   --font-mono: "Fira Code", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 

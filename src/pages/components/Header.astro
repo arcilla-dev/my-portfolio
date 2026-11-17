@@ -3,9 +3,11 @@ import ThemeToggle from "./ThemeToggle.astro";
 
 interface Props {
   current?: "home" | "projects" | "about";
+  /** Text shown at the left of the header, e.g. "<My_Projects/>" */
+  brand?: string;
 }
 
-const { current = "home" } = Astro.props;
+const { current = "home", brand = "<Josh_Nathaniel_Arcilla/>" } = Astro.props;
 
 const links = [
   { id: "home", label: "<Home/>", href: "/" },
@@ -28,7 +30,7 @@ const linkActive = "border-accent bg-accent-soft text-accent";
       href="/"
       class="flex items-center gap-1 text-accent outline-none focus-visible:underline md:justify-self-start"
     >
-      <span>&lt;Josh_Nathaniel_Arcilla/&gt;</span>
+      <span>{brand}</span>
     </a>
 
     <!-- Mobile: theme toggle + menu button live in the top row -->

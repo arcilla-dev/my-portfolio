@@ -1,0 +1,87 @@
+---
+import BaseLayout from "./layouts/BaseLayout.astro";
+import ProjectFilters from "./components/ProjectFilters.astro";
+import ProjectCard from "./components/ProjectCard.astro";
+import { projects } from "../data/projects";
+---
+
+<BaseLayout
+	title="Projects | Josh Nathaniel Arcilla"
+	description="Selected projects by Josh Nathaniel Arcilla, filterable by technology."
+	current="projects"
+	brand={"<My_Projects/>"}
+>
+	<main id="main" class="flex min-h-0 flex-1 flex-col pt-(--bar-h) pb-(--bar-h) md:flex-row">
+		<ProjectFilters />
+
+		<section class="flex min-h-0 min-w-0 flex-1 flex-col">
+			<!-- Active-filter tab -->
+			<div class="flex h-[2.6rem] shrink-0 items-stretch border-b border-line bg-surface text-[0.7rem]">
+				<div class="flex items-center gap-4 border-r border-line bg-bg px-4 text-accent">
+					<span id="filter-label">all_projects</span>
+					<button
+						id="filter-clear"
+						type="button"
+						hidden
+						class="cursor-pointer text-muted transition-colors hover:text-accent"
+						aria-label="Clear filters"
+					>
+						<svg viewBox="0 0 24 24" class="size-3" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+							<path d="M6 6l12 12M18 6L6 18" />
+						</svg>
+					</button>
+				</div>
+			</div>
+
+			<div class="flex-1 overflow-y-auto p-6 md:px-8 md:py-9 [scrollbar-width:thin]">
+				<ul class="grid grid-cols-[repeat(auto-fill,minmax(15rem,1fr))] gap-x-5 gap-y-8">
+					{
+						projects.map((project, i) => (
+							<li data-project data-tech={project.tech.join(" ")} class="list-none">
+								<ProjectCard project={project} number={i + 1} />
+							</li>
+						))
+					}
+				</ul>
+
+				<p id="empty-state" hidden class="py-16 text-center text-[0.8rem] text-muted">
+					// no projects match these filters
+				</p>
+			</div>
+		</section>
+	</main>
+</BaseLayout>
+
+<script>
+	const boxes = document.querySelectorAll<HTMLInputElement>("[data-filter]");
+	const items = document.querySelectorAll<HTMLElement>("[data-project]");
+	const label = document.getElementById("filter-label")!;
+	const clearBtn = document.getElementById("filter-clear")!;
+	const empty = document.getElementById("empty-state")!;
+
+	function apply() {
+		const active = [...boxes].filter((b) => b.checked);
+		const ids = active.map((b) => b.value);
+		let visible = 0;
+
+		items.forEach((item) => {
+			const techs = (item.dataset.tech ?? "").split(" ");
+			// A project shows if it uses ANY of the checked technologies (none checked = show all).
+			const show = ids.length === 0 || ids.some((id) => techs.includes(id));
+			item.hidden = !show;
+			if (show) visible++;
+		});
+
+		label.textContent = active.length ? active.map((b) => b.dataset.label).join("; ") : "all_projects";
+		clearBtn.hidden = active.length === 0;
+		empty.hidden = visible !== 0;
+	}
+
+	boxes.forEach((b) => b.addEventListener("change", apply));
+	clearBtn.addEventListener("click", () => {
+		boxes.forEach((b) => (b.checked = false));
+		apply();
+	});
+
+	apply();
+</script>
