@@ -1,16 +1,69 @@
 ---
+import "../styles/global.css";
+import Header from "../pages/components/Header.astro";
+import Hero from "../pages/components/Hero.astro";
+import Footer from "../pages/components/Footer.astro";
+
+const title = "Josh Nathaniel Arcilla | Full-Stack Developer";
+const description =
+  "Portfolio of Josh Nathaniel Arcilla, a full-stack developer building fast, maintainable, and visually clear web apps.";
 ---
 
-<html lang="en">
+<html lang="en" data-theme="dark">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="icon" href="/favicon.ico" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta name="theme-color" content="#1e1e1e" />
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- Apply the saved theme (or the system preference) before first paint -->
+		<script is:inline>
+			try {
+				const saved = localStorage.getItem("theme");
+				const system = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+				document.documentElement.dataset.theme = saved === "light" || saved === "dark" ? saved : system;
+			} catch (e) {}
+		</script>
 	</head>
 	<body>
-		<h1>Astro</h1>
+		<a
+			href="#main"
+			class="sr-only rounded bg-accent px-3 py-2 text-xs text-bg focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50"
+		>
+			Skip to content
+		</a>
+
+		<Header current="home" />
+
+		<main
+			id="main"
+			class="relative isolate flex min-h-0 flex-1 items-center justify-center px-6 py-[calc(var(--bar-h)+1.5rem)]"
+		>
+			<!-- Ambient background: soft glow + faded dot grid -->
+			<div aria-hidden="true" class="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+				<div class="absolute top-1/2 left-1/2 size-[520px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/10 blur-3xl"></div>
+				<div
+					class="absolute inset-0 opacity-60 [background-image:radial-gradient(var(--line)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"
+				></div>
+			</div>
+
+			<Hero />
+		</main>
+
+		<Footer />
 	</body>
 </html>

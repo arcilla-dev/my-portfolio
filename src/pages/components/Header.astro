@@ -1,0 +1,90 @@
+---
+import ThemeToggle from "./ThemeToggle.astro";
+
+interface Props {
+  current?: "home" | "projects" | "about";
+}
+
+const { current = "home" } = Astro.props;
+
+const links = [
+  { id: "home", label: "<Home/>", href: "/" },
+  { id: "projects", label: "<Projects/>", href: "/projects" },
+  { id: "about", label: "<About_me/>", href: "/about" },
+];
+
+const linkBase =
+  "flex items-center border-b-2 px-2 py-2.5 outline-none transition-colors focus-visible:bg-accent-soft focus-visible:text-accent md:px-3.5 md:py-0";
+const linkIdle = "border-transparent text-muted hover:bg-accent-soft/60 hover:text-fg";
+const linkActive = "border-accent bg-accent-soft text-accent";
+---
+
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-0 z-20 flex min-h-(--bar-h) flex-wrap items-stretch border-b border-line bg-surface/90 px-3 text-[0.7rem] backdrop-blur transition-shadow data-[scrolled]:shadow-card md:h-(--bar-h) md:grid md:grid-cols-[1fr_auto_1fr] md:px-3.5"
+>
+  <div class="flex h-(--bar-h) w-full items-center justify-between gap-2 md:contents">
+    <a
+      href="/"
+      class="flex items-center gap-1 text-accent outline-none focus-visible:underline md:justify-self-start"
+    >
+      <span>&lt;Josh_Nathaniel_Arcilla/&gt;</span>
+    </a>
+
+    <!-- Mobile: theme toggle + menu button live in the top row -->
+    <div class="flex items-center gap-2 md:hidden">
+      <ThemeToggle class="flex" />
+      <button
+        id="menu-toggle"
+        type="button"
+        class="flex size-7 items-center justify-center rounded text-muted hover:text-fg"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+        aria-controls="site-menu"
+      >
+        <svg viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="site-menu" class="hidden w-full flex-col pb-2 md:contents">
+    <nav class="flex flex-wrap items-stretch md:justify-self-center" aria-label="Primary">
+      {
+        links.map((link) => (
+          <a
+            href={link.href}
+            class:list={[linkBase, current === link.id ? linkActive : linkIdle]}
+            aria-current={current === link.id ? "page" : undefined}
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+
+    <!-- Desktop: theme toggle sits where Contact/Resume used to be -->
+    <div class="hidden items-center md:flex md:justify-self-end">
+      <ThemeToggle class="flex" />
+    </div>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById("site-header")!;
+  const toggle = document.getElementById("menu-toggle")!;
+  const menu = document.getElementById("site-menu")!;
+
+  toggle.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    menu.classList.toggle("hidden", open);
+    menu.classList.toggle("flex", !open);
+  });
+
+  const onScroll = () => header.toggleAttribute("data-scrolled", window.scrollY > 4);
+  onScroll();
+  window.addEventListener("scroll", onScroll, { passive: true });
+</script>

@@ -1,0 +1,206 @@
+---
+interface Props {
+  name?: string;
+  role?: string;
+  status?: string;
+  resumeHref?: string;
+}
+
+const {
+  name = "Josh Nathaniel Arcilla",
+  role = "Full-Stack Developer",
+  status = "Open to work",
+  resumeHref = "/resume.pdf",
+} = Astro.props;
+
+// Edit this to match your real stack. It feeds the stack.js tab.
+const stack: Record<string, string[]> = {
+  frontend: ["Astro", "React", "Tailwind"],
+  backend: ["Node.js", "Express"],
+  data: ["PostgreSQL", "MongoDB"],
+  tools: ["Git", "Docker"],
+};
+
+const c = (t: string) => `<span class="text-code-comment">${t}</span>`;
+const k = (t: string) => `<span class="text-code-key">${t}</span>`;
+const s = (t: string) => `<span class="text-code-string">${t}</span>`;
+
+const developerLines = [
+  c("// More than a tech stack."),
+  `${k("const")} developer = {`,
+  `  name: ${s(`"${name}"`)},`,
+  `  focus: ${s('"interface → backend"')},`,
+  `  mindset: [`,
+  `    ${s('"build"')},`,
+  `    ${s('"learn"')},`,
+  `    ${s('"iterate"')}`,
+  `  ]`,
+  `};`,
+  ``,
+  `${k("export default")} developer;`,
+];
+
+const entries = Object.entries(stack);
+const stackLines = [
+  c("// What I build with"),
+  `${k("const")} stack = {`,
+  ...entries.map(
+    ([key, items], i) =>
+      `  ${key}: [${items.map((x) => s(`"${x}"`)).join(", ")}]${i < entries.length - 1 ? "," : ""}`,
+  ),
+  `};`,
+  ``,
+  `${k("export default")} stack;`,
+];
+
+const files = [
+  { id: "developer", name: "developer.js", lines: developerLines },
+  { id: "stack", name: "stack.js", lines: stackLines },
+];
+
+const plain = (lines: string[]) => lines.join("\n").replace(/<[^>]+>/g, "");
+
+const btn =
+  "inline-flex items-center rounded-md border px-3.5 py-2 text-[0.75rem] outline-none transition-all focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-bg";
+---
+
+<section
+  class="grid w-full max-w-[65rem] grid-cols-1 items-center gap-10 md:grid-cols-[1fr_23.75rem] md:gap-14"
+>
+  <div class="motion-safe:animate-fade-up">
+    <span
+      class="mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-[0.7rem] text-muted"
+    >
+      <span class="relative flex size-2">
+        <span class="absolute inline-flex size-full rounded-full bg-accent opacity-60 motion-safe:animate-ping"></span>
+        <span class="relative inline-flex size-2 rounded-full bg-accent"></span>
+      </span>
+      {status}
+    </span>
+
+    <p class="mb-3 text-[0.95rem] text-muted">Hi everyone, I am</p>
+    <h1 class="mb-6 max-w-[16ch] text-[2.25rem] leading-[1.15] md:text-[3.25rem] font-normal tracking-wide max-md:max-w-none">
+      {name}
+    </h1>
+    <p class="mb-8 flex items-center text-[1.2rem] text-accent">
+      &gt;&nbsp;{role}
+      <span class="ml-1.5 inline-block h-[1.1em] w-[0.55ch] bg-accent motion-safe:animate-blink" aria-hidden="true"></span>
+    </p>
+
+    <p class="mb-9 text-[0.85rem] leading-[1.7] text-muted">
+      // Full-stack developer building fast, maintainable,<br />
+      // and visually clear web apps
+    </p>
+
+    <div class="flex flex-wrap gap-3">
+      <a href="/projects" class:list={[btn, "border-accent bg-accent text-bg hover:brightness-110"]}>
+        view_projects()
+      </a>
+      <a href={resumeHref} download class:list={[btn, "border-line text-fg hover:border-accent hover:text-accent"]}>
+        download_resume()
+      </a>
+      <a href="/contact" class:list={[btn, "border-transparent text-muted hover:text-accent"]}>
+        contact_me()
+      </a>
+    </div>
+  </div>
+
+  <div
+    id="code-card"
+    class="overflow-hidden rounded-lg border border-line bg-surface text-[0.7rem] shadow-card transition-transform duration-300 hover:-translate-y-1 motion-safe:animate-fade-up [animation-delay:150ms]"
+  >
+    <div class="flex items-stretch justify-between border-b border-line bg-surface-alt">
+      <div role="tablist" aria-label="Code files" class="flex">
+        {
+          files.map((f, i) => (
+            <button
+              type="button"
+              role="tab"
+              id={`tab-${f.id}`}
+              data-tab={f.id}
+              aria-controls={`panel-${f.id}`}
+              aria-selected={i === 0 ? "true" : "false"}
+              class="flex cursor-pointer items-center gap-1.5 border-b-2 border-transparent px-4 py-3 text-muted outline-none transition-colors hover:text-fg aria-selected:border-accent aria-selected:text-fg"
+            >
+              <span class="text-accent">JS</span>
+              {f.name}
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="flex items-center gap-3 pr-4">
+        <button
+          type="button"
+          id="copy-code"
+          class="flex cursor-pointer items-center gap-1 text-muted transition-colors hover:text-accent"
+          aria-label="Copy code"
+        >
+          <svg viewBox="0 0 24 24" class="size-3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="9" y="9" width="11" height="11" rx="2" />
+            <path d="M5 15V6a2 2 0 012-2h9" />
+          </svg>
+          <span data-copy-label>copy</span>
+        </button>
+        <span class="size-[7px] rounded-full bg-accent" aria-hidden="true"></span>
+      </div>
+    </div>
+
+    {
+      files.map((f, i) => (
+        <ol
+          role="tabpanel"
+          id={`panel-${f.id}`}
+          aria-labelledby={`tab-${f.id}`}
+          data-panel={f.id}
+          data-code={plain(f.lines)}
+          class:list={["m-0 min-h-[19.5rem] list-none overflow-x-auto p-4", { hidden: i !== 0 }]}
+        >
+          {f.lines.map((line, n) => (
+            <li class="group flex min-h-[1.6em] gap-3.5 rounded-sm leading-[1.6] whitespace-pre hover:bg-accent-soft">
+              <span class="w-4 shrink-0 text-code-comment select-none">
+                {String(n + 1).padStart(2, "0")}
+              </span>
+              <span set:html={line} />
+            </li>
+          ))}
+        </ol>
+      ))
+    }
+
+    <div class="flex items-center justify-between border-t border-line px-4 py-3 text-muted">
+      <span>Build. Learn. Iterate.</span>
+      <span class="flex items-center gap-3">
+        <span class="hidden sm:inline">UTF-8</span>
+        <span class="text-accent" aria-hidden="true">&lt;/&gt;</span>
+      </span>
+    </div>
+  </div>
+</section>
+
+<script>
+  const card = document.getElementById("code-card")!;
+  const tabs = card.querySelectorAll<HTMLButtonElement>("[data-tab]");
+  const panels = card.querySelectorAll<HTMLElement>("[data-panel]");
+  const copyBtn = document.getElementById("copy-code")!;
+  const copyLabel = copyBtn.querySelector<HTMLElement>("[data-copy-label]")!;
+
+  function select(id: string) {
+    tabs.forEach((t) => t.setAttribute("aria-selected", String(t.dataset.tab === id)));
+    panels.forEach((p) => p.classList.toggle("hidden", p.dataset.panel !== id));
+  }
+
+  tabs.forEach((t) => t.addEventListener("click", () => select(t.dataset.tab!)));
+
+  copyBtn.addEventListener("click", async () => {
+    const active = card.querySelector<HTMLElement>("[data-panel]:not(.hidden)");
+    if (!active?.dataset.code) return;
+    try {
+      await navigator.clipboard.writeText(active.dataset.code);
+      copyLabel.textContent = "copied!";
+    } catch {
+      copyLabel.textContent = "failed";
+    }
+    setTimeout(() => (copyLabel.textContent = "copy"), 1500);
+  });
+</script>
