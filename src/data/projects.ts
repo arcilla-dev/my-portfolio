@@ -19,25 +19,46 @@ export interface Project {
  * the card, the numbering and the filters all update automatically.
  */
 export const projects: Project[] = [
+    {
+    slug: "Meneses One-Stop",
+    description: "A student facing web service for Bulacan State University - Meneses Campus.",
+    tech: ["Next.js", "Tailwind CSS", "Supabase", "PostgreSQL"],
+    href: "https://meneses-one-stop.vercel.app/",
+    image: "/Meneses-One-Stop.png"
+  },
   {
-    slug: "_ui-animations",
-    description: "Interface animations built with React.",
-    tech: ["react", "css"],
+    slug: "My Personal Portfolio",
+    description: "My personal portfolio built with Astro",
+    tech: ["Astro", "Tailwind CSS"],
+    href: "#",
+    image: "/my-portfolio.png"
+  },
+  {
+    slug: "Placeholder 1",
+    description: "Placehodler for unbuilt projects",
+    tech: ["React"],
     href: "#",
     hue: 350,
   },
   {
-    slug: "_tetris-game",
-    description: "A classic block-stacking game built with React.",
-    tech: ["react"],
+    slug: "Placeholder 2",
+    description: "Another placeholder",
+    tech: ["React"],
     href: "#",
     hue: 290,
   },
   {
-    slug: "_nimbus",
-    description: "A responsive interface built with Vue.",
-    tech: ["vue", "css"],
+    slug: "Placeholder 3",
+    description: "Yet another placeholder",
+    tech: ["React"],
     href: "#",
     hue: 190,
+  },
+  {
+    slug: "Placeholder 4",
+    description: "Placeholder final",
+    tech: ["React"],
+    href: "#",
+    hue: 100,
   },
 ];

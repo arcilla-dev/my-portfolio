@@ -7,17 +7,32 @@ interface Props {
 }
 
 const { id, class: className = "size-4" } = Astro.props;
-const tech = techs[id];
+const icon = techs[id].icon;
+
+// Icons that are file paths (e.g. "/icons/react.svg") are drawn as a mask,
+// so they take the current text colour. Anything else is inline SVG markup.
+const isFile = icon.startsWith("/");
+const mask = `url("${icon}") center / contain no-repeat`;
 ---
 
-<svg
-  viewBox="0 0 24 24"
-  class={className}
-  fill="none"
-  stroke="currentColor"
-  stroke-width="1.6"
-  stroke-linecap="round"
-  stroke-linejoin="round"
-  aria-hidden="true"
-  set:html={tech.icon}
-/>
+{
+  isFile ? (
+    <span
+      class:list={["inline-block bg-current", className]}
+      style={`mask: ${mask}; -webkit-mask: ${mask};`}
+      aria-hidden="true"
+    />
+  ) : (
+    <svg
+      viewBox="0 0 24 24"
+      class={className}
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      set:html={icon}
+    />
+  )
+}
