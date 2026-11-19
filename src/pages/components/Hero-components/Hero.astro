@@ -10,44 +10,44 @@ const {
   name = "Josh Nathaniel Arcilla",
   role = "Full-Stack Developer",
   status = "Open to work",
-  resumeHref = "/resume.pdf",
+  resumeHref = "/Josh-Nathaniel-Arcilla-Resume.pdf",
 } = Astro.props;
 
-// Edit this to match your real stack. It feeds the stack.js tab.
-const stack: Record<string, string[]> = {
-  frontend: ["Astro", "React", "Tailwind"],
-  backend: ["Node.js", "Express"],
-  data: ["PostgreSQL", "MongoDB"],
-  tools: ["Git", "Docker"],
-};
 
 const c = (t: string) => `<span class="text-code-comment">${t}</span>`;
 const k = (t: string) => `<span class="text-code-key">${t}</span>`;
 const s = (t: string) => `<span class="text-code-string">${t}</span>`;
 
 const developerLines = [
-  c("// More than a tech stack."),
+  c("// More than building interfaces."),
+  c("// Engineering complete solutions."),
   `${k("const")} developer = {`,
   `  name: ${s(`"${name}"`)},`,
-  `  focus: ${s('"interface → backend"')},`,
-  `  mindset: [`,
-  `    ${s('"build"')},`,
-  `    ${s('"learn"')},`,
-  `    ${s('"iterate"')}`,
-  `  ]`,
+  `  role: ${s('"Full-Stack Developer"')},`,
+  `  focus: [`,
+  `    ${s('"frontend development",')}`,
+  `    ${s('"backend development",')}`,
+  `    ${s('"database design"')}`,
+  `  ],`,
+  `  philosophy: ${s('"write code with purpose"')}`,
   `};`,
   ``,
   `${k("export default")} developer;`,
 ];
 
-const entries = Object.entries(stack);
 const stackLines = [
   c("// What I build with"),
   `${k("const")} stack = {`,
-  ...entries.map(
-    ([key, items], i) =>
-      `  ${key}: [${items.map((x) => s(`"${x}"`)).join(", ")}]${i < entries.length - 1 ? "," : ""}`,
-  ),
+  `  frontend: [`,
+  `    ${s('"Astro", "React",')}`,  
+  `    ${s('"Next.js", "Tailwind CSS"')}`, 
+  `  ],`,  
+  `  backend: [${s('"Spring Boot", "Supabase"')}],`,
+  `  database: [${s('"MySQL", "PostgreSQL"')}],`,  
+  `  developerTools: [`,
+  `    ${s('"Git", "GitHub",')}`,  
+  `    ${s('"Docker", "Vercel"')}`, 
+  `  ]`, 
   `};`,
   ``,
   `${k("export default")} stack;`,
@@ -88,15 +88,15 @@ const btn =
     </p>
 
     <p class="mb-9 text-[0.85rem] leading-[1.7] text-muted">
-      // Full-stack developer building fast, maintainable,<br />
-      // and visually clear web apps
+      // Building scalable application with an<br />
+      // emphasis on  performance and usability.
     </p>
 
     <div class="flex flex-wrap gap-3">
       <a href="/projects" class:list={[btn, "border-accent bg-accent text-bg hover:brightness-110"]}>
         view_projects()
       </a>
-      <a href={resumeHref} download class:list={[btn, "border-line text-fg hover:border-accent hover:text-accent"]}>
+      <a href={resumeHref} download="Josh-Nathaniel-Arcilla-Resume.pdf" class:list={[btn, "border-line text-fg hover:border-accent hover:text-accent"]}>
         download_resume()
       </a>
       <a href="/contact" class:list={[btn, "border-transparent text-muted hover:text-accent"]}>
@@ -169,7 +169,7 @@ const btn =
     }
 
     <div class="flex items-center justify-between border-t border-line px-4 py-3 text-muted">
-      <span>Build. Learn. Iterate.</span>
+      <span>Understand. Build. Test. Iterate.</span>
       <span class="flex items-center gap-3">
         <span class="hidden sm:inline">UTF-8</span>
         <span class="text-accent" aria-hidden="true">&lt;/&gt;</span>
