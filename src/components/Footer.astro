@@ -1,6 +1,7 @@
 ---
 interface Props {
   facebook?: string;
+  facebookUser?: string;
   linkedin?: string;
   githubUser?: string;
   github?: string;
@@ -9,7 +10,8 @@ interface Props {
 }
 
 const {
-  facebook = "https://facebook.com/",
+  facebookUser = "joshnathaniel.arcilla",
+  facebook = `https://facebook.com/${facebookUser}`,
   linkedin = "https://www.linkedin.com/in/josh-nathaniel-arcilla/",
   githubUser = "arcilla-dev",
   github = `https://github.com/${githubUser}`,

@@ -2,7 +2,7 @@
 import ThemeToggle from "./ThemeToggle.astro";
 
 interface Props {
-  current?: "home" | "projects" | "about";
+  current?: "home" | "projects" | "about" | "contact";
   /** Text shown at the left of the header, e.g. "<My_Projects/>" */
   brand?: string;
 }
@@ -12,7 +12,8 @@ const { current = "home", brand = "<Josh_Nathaniel_Arcilla/>" } = Astro.props;
 const links = [
   { id: "home", label: "<Home/>", href: "/" },
   { id: "projects", label: "<Projects/>", href: "/projects" },
-  { id: "about", label: "<About_me/>", href: "/about" },
+  { id: "about", label: "<About_Me/>", href: "/about" },
+  { id: "contact", label: "<Contact_Me/>", href: "/contact"},
 ];
 
 const linkBase =
