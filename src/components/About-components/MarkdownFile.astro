@@ -1,0 +1,26 @@
+---
+import { highlightLine } from "../../utils/highlightMarkdown";
+import type { AboutFile } from "../../data/about";
+
+interface Props {
+  file: AboutFile;
+}
+
+const { file } = Astro.props;
+---
+
+<ol
+  data-panel={file.id}
+  aria-label={file.name}
+  hidden
+  class="m-0 list-none px-4 py-5 text-[0.78rem] md:px-6"
+>
+  {
+    file.lines.map((line, i) => (
+      <li class="flex min-h-[1.7em] gap-5 leading-[1.7] text-muted">
+        <span class="w-6 shrink-0 text-right text-code-comment select-none">{i + 1}</span>
+        <span class="min-w-0 break-words whitespace-pre-wrap" set:html={highlightLine(line)} />
+      </li>
+    ))
+  }
+</ol>

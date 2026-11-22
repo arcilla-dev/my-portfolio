@@ -1,0 +1,60 @@
+---
+import { testimonials } from "../../data/testimonials";
+
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+---
+
+<aside
+  class="shrink-0 border-t border-line bg-bg px-5 py-5 lg:w-[22rem] lg:overflow-y-auto lg:border-t-0 lg:border-l [scrollbar-width:thin]"
+  aria-label="Testimonials"
+>
+  <h2 class="mb-6 text-[0.78rem] font-normal text-muted">// Testimonials:</h2>
+
+  <ul class="flex flex-col gap-7">
+    {
+      testimonials.map((t) => (
+        <li>
+          <div class="mb-2.5 flex items-start justify-between gap-3">
+            <div class="flex min-w-0 items-center gap-2.5">
+              <span
+                class="grid size-8 shrink-0 place-items-center rounded-full text-[0.65rem] font-medium text-white"
+                style={`background: linear-gradient(135deg, hsl(${t.hue ?? 170} 55% 28%), hsl(${((t.hue ?? 170) + 50) % 360} 60% 40%))`}
+                aria-hidden="true"
+              >
+                {initials(t.name)}
+              </span>
+              <div class="min-w-0 leading-tight">
+                <p class="truncate text-[0.72rem] text-accent">{t.handle}</p>
+                <p class="mt-0.5 truncate text-[0.65rem] text-muted">{t.role}</p>
+              </div>
+            </div>
+
+            {
+              t.rating && (
+                <span class="flex shrink-0 gap-0.5 pt-0.5 text-accent" role="img" aria-label={`${t.rating} out of 5 stars`}>
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <svg viewBox="0 0 24 24" class:list={["size-3", n > (t.rating ?? 0) && "text-line"]} fill="currentColor" aria-hidden="true">
+                      <path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" />
+                    </svg>
+                  ))}
+                </span>
+              )
+            }
+          </div>
+
+          <blockquote class="rounded-lg border border-line bg-surface p-4 text-[0.75rem] leading-[1.7]">
+            <span class="text-code-comment select-none">&gt; </span>{t.quote}
+          </blockquote>
+
+          <p class="mt-2 text-[0.65rem] text-muted">Posted {t.posted}</p>
+        </li>
+      ))
+    }
+  </ul>
+</aside>

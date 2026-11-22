@@ -1,0 +1,109 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AboutSidebar from "../components/About-components/AboutSidebar.astro";
+import MarkdownFile from "../components/About-components/MarkdownFile.astro";
+import Testimonials from "../components/About-components/Testimonials.astro";
+import { folders, defaultFileId } from "../data/about";
+
+const files = folders.flatMap((f) => f.files);
+---
+
+<BaseLayout
+	title="About | Josh Nathaniel Arcilla"
+	description="About Josh Nathaniel Arcilla: bio, interests, education, and testimonials."
+	current="about"
+	brand={"<About_me/>"}
+>
+	<main id="main" class="flex min-h-0 flex-1 flex-col pt-(--bar-h) pb-(--bar-h) md:flex-row">
+		<AboutSidebar />
+
+		<section class="flex min-h-0 min-w-0 flex-1 flex-col md:overflow-y-auto lg:flex-row lg:overflow-hidden">
+			<!-- Editor: tabs + the open Markdown file -->
+			<div class="flex min-w-0 flex-1 flex-col lg:min-h-0">
+				<div
+					id="editor-tabs"
+					role="tablist"
+					aria-label="Open files"
+					class="flex h-[2.6rem] shrink-0 items-stretch overflow-x-auto border-b border-line bg-surface text-[0.7rem] [scrollbar-width:none]"
+				>
+				</div>
+
+				<div class="min-h-[14rem] flex-1 bg-bg lg:overflow-y-auto [scrollbar-width:thin]">
+					{files.map((file) => <MarkdownFile file={file} />)}
+
+					<p id="editor-empty" hidden class="px-6 py-12 text-[0.78rem] text-muted">
+						// select a file from the sidebar to open it
+					</p>
+				</div>
+			</div>
+
+			<Testimonials />
+		</section>
+	</main>
+</BaseLayout>
+
+<script define:vars={{ defaultFileId }}>
+	const tabsEl = document.getElementById("editor-tabs");
+	const panels = document.querySelectorAll("[data-panel]");
+	const fileBtns = document.querySelectorAll("[data-file]");
+	const empty = document.getElementById("editor-empty");
+
+	let open = [];
+	let active = null;
+
+	const nameOf = (id) => document.querySelector(`[data-file="${id}"]`)?.dataset.name ?? id;
+
+	function render() {
+		tabsEl.innerHTML = "";
+
+		open.forEach((id) => {
+			const isActive = id === active;
+
+			const tab = document.createElement("div");
+			tab.setAttribute("role", "presentation");
+			tab.className =
+				"flex items-center border-r border-line transition-colors " +
+				(isActive ? "border-b-2 border-b-accent bg-bg text-accent" : "text-muted hover:text-fg");
+
+			const select = document.createElement("button");
+			select.type = "button";
+			select.setAttribute("role", "tab");
+			select.setAttribute("aria-selected", String(isActive));
+			select.className = "cursor-pointer whitespace-nowrap py-0 pr-2 pl-4 outline-none focus-visible:underline h-full";
+			select.textContent = nameOf(id);
+			select.addEventListener("click", () => show(id));
+
+			const close = document.createElement("button");
+			close.type = "button";
+			close.className = "mr-2 grid size-6 cursor-pointer place-items-center rounded text-muted hover:bg-accent-soft hover:text-accent";
+			close.setAttribute("aria-label", `Close ${nameOf(id)}`);
+			close.innerHTML =
+				'<svg viewBox="0 0 24 24" class="size-3" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+			close.addEventListener("click", () => closeTab(id));
+
+			tab.append(select, close);
+			tabsEl.append(tab);
+		});
+
+		panels.forEach((p) => (p.hidden = p.dataset.panel !== active));
+		fileBtns.forEach((b) => b.setAttribute("aria-current", String(b.dataset.file === active)));
+		empty.hidden = active !== null;
+	}
+
+	function show(id) {
+		if (!open.includes(id)) open.push(id);
+		active = id;
+		render();
+	}
+
+	function closeTab(id) {
+		const index = open.indexOf(id);
+		open = open.filter((x) => x !== id);
+		if (active === id) active = open[Math.min(index, open.length - 1)] ?? null;
+		render();
+	}
+
+	fileBtns.forEach((b) => b.addEventListener("click", () => show(b.dataset.file)));
+
+	show(defaultFileId);
+</script>

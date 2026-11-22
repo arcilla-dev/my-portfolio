@@ -30,7 +30,7 @@ export const projects: Project[] = [
     slug: "My Personal Portfolio",
     description: "My personal portfolio built with Astro",
     tech: ["Astro", "Tailwind CSS"],
-    href: "#",
+    href: "https://arcilladev.vercel.app/",
     image: "/my-portfolio.png"
   },
   {
